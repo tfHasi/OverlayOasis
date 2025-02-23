@@ -22,10 +22,12 @@ def handle_login():
     auth_url, _ = flow.authorization_url(prompt="consent")
     return jsonify({"auth_url": auth_url})
 
+from flask import redirect
+
 def handle_callback():
     """
     Handles the OAuth callback, stores user credentials in the session,
-    and redirects to the frontend with user data.
+    and redirects to the frontend dashboard.
     """
     try:
         # Fetch the token from the request URL
@@ -60,19 +62,13 @@ def handle_callback():
         user_info_service = build("oauth2", "v2", credentials=credentials)
         user_info = user_info_service.userinfo().get().execute()
 
-        # Redirect to the frontend with user data as query parameters
-        frontend_url = "http://localhost:5173/profile"  # Replace with your frontend URL
-        redirect_url = (
-            f"{frontend_url}?"
-            f"email={user_info['email']}&"
-            f"id={user_info['id']}&"
-            f"picture={user_info['picture']}&"
-            f"verified_email={user_info['verified_email']}"
-        )
-        return redirect(redirect_url)
+        # Redirect to the frontend dashboard
+        frontend_url = "http://localhost:5173/dashboard"  # Replace with your frontend URL
+        return redirect(frontend_url)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+    
 def handle_logout():
     """
     Clears the session and logs the user out.

@@ -10,7 +10,6 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  setUser: (user: User | null) => void;
   login: () => void;
   logout: () => void;
 }
@@ -30,7 +29,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = () => {
     axios.get<{ auth_url: string }>("http://localhost:5000/login", { withCredentials: true })
       .then(response => {
-        window.location.href = response.data.auth_url;
+        window.location.href = response.data.auth_url; // Redirect to Google OAuth
       })
       .catch(error => {
         console.error("Login failed:", error);
@@ -42,12 +41,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       .then(() => {
         setUser(null);
         localStorage.removeItem("user");
+        window.location.href = "/"; // Redirect to home page after logout
       })
       .catch(console.error);
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
