@@ -1,6 +1,40 @@
-# .gitignore
+# Ignore environment variables file
 .env
+
+# Ignore Google API client secret file
 client_secret.json
+
+# Ignore Python bytecode files
 __pycache__/
+*.py[cod]
+
+# Ignore uploaded files
 uploads/
+
+# Ignore output files
 outputs/
+
+# Ignore Node.js dependencies
+node_modules/
+
+# Ignore Python package directories
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Ignore log files
+*.log
+
+# Ignore virtual environment directories
+.venv/
+
+# Ignore macOS files
+.DS_Store
+
+# Ignore JetBrains specific folder (PyCharm, IntelliJ, etc.)
+.idea/
+
+# Ignore VSCode files
+.vscode/
