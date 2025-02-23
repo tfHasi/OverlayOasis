@@ -1,5 +1,6 @@
 import os
 import subprocess
+from concurrent.futures import ThreadPoolExecutor
 from config import Config
 
 def get_position_coordinates(position, video_width="w", video_height="h"):
@@ -19,65 +20,87 @@ def get_position_coordinates(position, video_width="w", video_height="h"):
     }
     return position_map.get(position, ("(w-text_w)/2", "h-24"))
 
+def process_single_video(video_path, output_path, text, font_size, font_color, font_style, x_pos, y_pos):
+    """
+    Process a single video with the given text overlay.
+    """
+    try:
+        # Build the drawtext filter
+        filter_text = (
+            f"drawtext=text='{text}'"
+            f":fontsize={font_size}"
+            f":fontcolor={font_color}"
+            f":box=1:boxcolor=black@0.5"
+            f":boxborderw=5"
+            f":x={x_pos}"
+            f":y={y_pos}"
+        )
+
+        # FFmpeg command
+        command = [
+            'ffmpeg',
+            '-i', video_path,
+            '-vf', filter_text,
+            '-c:a', 'copy',
+            '-c:v', 'libx264',
+            '-preset', 'medium',
+            '-crf', '23',
+            output_path,
+            '-y'
+        ]
+
+        # Run the FFmpeg command
+        subprocess.run(command, check=True)
+        return output_path
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"FFmpeg error: {e.stderr}")
+
 def add_text_overlay(video_path, text_pairs, font_size=24, font_color="white", font_style="Arial", position="bottom-center"):
     """
-    Creates separate videos for each language with respective text overlays.
-    Returns a list of output paths.
+    Adds text overlays to a video with advanced styling options.
+    Processes videos in parallel.
     """
     try:
         os.makedirs(Config.OUTPUT_FOLDER, exist_ok=True)
         output_paths = []
         x_pos, y_pos = get_position_coordinates(position)
 
-        # Process each language pair separately
-        for lang, trans in text_pairs:
-            # Create language-specific output filename
-            base_name = os.path.basename(video_path)
-            name_without_ext = os.path.splitext(base_name)[0]
-            output_path = os.path.join(
-                Config.OUTPUT_FOLDER, 
-                f"{name_without_ext}_{lang}.mp4"
-            )
+        # Use ThreadPoolExecutor for parallel processing
+        with ThreadPoolExecutor() as executor:
+            futures = []
+            for lang, trans in text_pairs:
+                # Create language-specific output filename
+                base_name = os.path.basename(video_path)
+                name_without_ext = os.path.splitext(base_name)[0]
+                output_path = os.path.join(
+                    Config.OUTPUT_FOLDER, 
+                    f"{name_without_ext}_{lang}.mp4"
+                )
 
-            # Escape special characters
-            lang = lang.replace(":", "\\:").replace("\\", "\\\\").replace("'", "\\'")
-            trans = trans.replace(":", "\\:").replace("\\", "\\\\").replace("'", "\\'")
-            text = f"{trans}"
+                # Escape special characters
+                lang = lang.replace(":", "\\:").replace("\\", "\\\\").replace("'", "\\'")
+                trans = trans.replace(":", "\\:").replace("\\", "\\\\").replace("'", "\\'")
+                text = f"{trans}"
 
-            filter_text = (
-                f"drawtext=text='{text}'"
-                f":fontsize={font_size}"
-                f":fontcolor={font_color}"
-                f":box=1:boxcolor=black@0.5"
-                f":boxborderw=5"
-                f":x={x_pos}"
-                f":y={y_pos}"
-            )
+                # Submit the task to the thread pool
+                future = executor.submit(
+                    process_single_video,
+                    video_path,
+                    output_path,
+                    text,
+                    font_size,
+                    font_color,
+                    font_style,
+                    x_pos,
+                    y_pos
+                )
+                futures.append(future)
 
-            command = [
-                'ffmpeg',
-                '-i', video_path,
-                '-vf', filter_text,
-                '-c:a', 'copy',
-                '-c:v', 'libx264',
-                '-preset', 'medium',
-                '-crf', '23',
-                output_path,
-                '-y'
-            ]
-
-            result = subprocess.run(
-                command,
-                capture_output=True,
-                text=True,
-                check=True
-            )
-
-            output_paths.append(output_path)
+            # Wait for all tasks to complete and collect results
+            for future in futures:
+                output_paths.append(future.result())
 
         return output_paths
 
-    except subprocess.CalledProcessError as e:
-        raise Exception(f"FFmpeg error: {e.stderr}")
     except Exception as e:
         raise Exception(f"Failed to add text overlay: {str(e)}")
