@@ -1,0 +1,6 @@
+# .gitignore
+.env
+client_secret.json
+__pycache__/
+uploads/
+outputs/
