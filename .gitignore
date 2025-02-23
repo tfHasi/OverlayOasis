@@ -1,0 +1,5 @@
+# Ignore the uploads folder and its contents
+uploads/
+
+# Ignore the outputs folder and its contents
+outputs/
