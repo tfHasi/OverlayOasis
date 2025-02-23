@@ -4,54 +4,67 @@ from config import Config
 
 def add_text_overlay(video_path, text_pairs, font_size=24, font_color="white", font_style="Arial", position=("center", "bottom")):
     """
-    Adds text overlays to a video using FFmpeg's drawtext filter.
-
-    Args:
-        video_path (str): Path to the input video file.
-        text_pairs (list): List of text pairs (language and translation).
-        font_size (int): Font size for the text.
-        font_color (str): Font color for the text.
-        font_style (str): Font style for the text.
-        position (tuple): Position of the text overlay (e.g., ("center", "bottom")).
-
-    Returns:
-        str: Path to the output video file.
+    Adds text overlays to a video using FFmpeg.
     """
     try:
-        # Output video path
-        output_path = os.path.join(Config.OUTPUT_FOLDER, "output.mp4")
+        # Ensure output directory exists
+        os.makedirs(Config.OUTPUT_FOLDER, exist_ok=True)
+        output_path = os.path.join(Config.OUTPUT_FOLDER, f"overlay_{os.path.basename(video_path)}")
 
-        # Generate the drawtext filter string for each text pair
-        filter_strings = []
-        for idx, pair in enumerate(text_pairs):
-            language, translation = pair
-            text = f"{language}: {translation}"
-            x, y = position
+        # Create drawtext filters for each text pair
+        drawtext_filters = []
+        y_offset = font_size
 
-            # Calculate position based on the index to avoid overlapping
-            y_offset = idx * (font_size + 10)  # Add some spacing between lines
-            y_position = f"h-{y_offset}" if y == "bottom" else f"{y_offset}"
-
-            # Add the drawtext filter
-            filter_strings.append(
-                f"drawtext=text='{text}':fontcolor={font_color}:fontsize={font_size}:fontfile={font_style}:x=(w-text_w)/2:y={y_position}"
+        for lang, trans in text_pairs:
+            # Properly escape special characters
+            lang = lang.replace(":", "\\:").replace("\\", "\\\\").replace("'", "\\'")
+            trans = trans.replace(":", "\\:").replace("\\", "\\\\").replace("'", "\\'")
+            
+            # Format the text with escaped characters
+            text = f"{lang}\\: {trans}"  # Escape the colon between language and translation
+            
+            filter_text = (
+                f"drawtext=text='{text}'"
+                f":fontsize={font_size}"
+                f":fontcolor={font_color}"
+                f":box=1:boxcolor=black@0.5"
+                f":boxborderw=5"
+                f":x=(w-text_w)/2"
+                f":y=h-{y_offset}"
             )
+            drawtext_filters.append(filter_text)
+            y_offset += font_size + 10
 
-        # Combine all filters into a single filter chain
-        filter_complex = ",".join(filter_strings)
+        # Join filters with comma
+        filter_complex = ','.join(drawtext_filters)
 
-        # FFmpeg command
-        ffmpeg_command = [
-            "ffmpeg",
-            "-i", video_path,
-            "-vf", filter_complex,
-            "-codec:a", "copy",  # Copy the audio stream without re-encoding
-            output_path
+        # Build FFmpeg command
+        command = [
+            'ffmpeg',
+            '-i', video_path,
+            '-vf', filter_complex,
+            '-c:a', 'copy',
+            '-c:v', 'libx264',
+            '-preset', 'medium',
+            '-crf', '23',
+            output_path,
+            '-y'
         ]
 
-        # Run the FFmpeg command
-        subprocess.run(ffmpeg_command, check=True)
+        # Print command for debugging
+        print(" ".join(command))
+
+        # Execute FFmpeg command
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            check=True
+        )
 
         return output_path
+
     except subprocess.CalledProcessError as e:
+        raise Exception(f"FFmpeg error: {e.stderr}")
+    except Exception as e:
         raise Exception(f"Failed to add text overlay: {str(e)}")
