@@ -17,6 +17,7 @@ def process():
         font_color = data.get("font_color", "white")
         font_style = data.get("font_style", "Arial")
         position = data.get("position", "bottom-center")
+        output_folder = data.get("output_folder")  # Get the custom output folder from the request
 
         output_paths = add_text_overlay(
             video_path, 
@@ -24,7 +25,8 @@ def process():
             font_size, 
             font_color, 
             font_style, 
-            position
+            position,
+            output_folder  # Pass the custom output folder
         )
 
         return jsonify({

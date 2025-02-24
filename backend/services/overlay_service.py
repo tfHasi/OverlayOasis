@@ -55,13 +55,15 @@ def process_single_video(video_path, output_path, text, font_size, font_color, f
     except subprocess.CalledProcessError as e:
         raise Exception(f"FFmpeg error: {e.stderr}")
 
-def add_text_overlay(video_path, text_pairs, font_size=24, font_color="white", font_style="Arial", position="bottom-center"):
+def add_text_overlay(video_path, text_pairs, font_size=24, font_color="white", font_style="Arial", position="bottom-center", output_folder=None):
     """
     Adds text overlays to a video with advanced styling options.
     Processes videos in parallel.
     """
     try:
-        os.makedirs(Config.OUTPUT_FOLDER, exist_ok=True)
+        # Use the provided output folder or fall back to the default one
+        output_dir = output_folder if output_folder else Config.OUTPUT_FOLDER
+        os.makedirs(output_dir, exist_ok=True)
         output_paths = []
         x_pos, y_pos = get_position_coordinates(position)
 
@@ -73,7 +75,7 @@ def add_text_overlay(video_path, text_pairs, font_size=24, font_color="white", f
                 base_name = os.path.basename(video_path)
                 name_without_ext = os.path.splitext(base_name)[0]
                 output_path = os.path.join(
-                    Config.OUTPUT_FOLDER, 
+                    output_dir, 
                     f"{name_without_ext}_{lang}.mp4"
                 )
 
