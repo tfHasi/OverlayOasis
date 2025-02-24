@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from services.overlay_service import add_text_overlay
+import os
 
 process_bp = Blueprint("process", __name__)
 
@@ -18,6 +19,11 @@ def process():
         font_style = data.get("font_style", "Arial")
         position = data.get("position", "bottom-center")
         output_folder = data.get("output_folder")  # Get the custom output folder from the request
+
+        # If no custom output folder is provided, create one in the same directory as the video
+        if output_folder is None:
+            video_dir = os.path.dirname(video_path)
+            output_folder = os.path.join(video_dir, "output")
 
         output_paths = add_text_overlay(
             video_path, 

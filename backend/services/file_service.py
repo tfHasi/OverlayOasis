@@ -26,7 +26,11 @@ def handle_video_upload(request):
 
     try:
         file.save(file_path)
-        return jsonify({"message": "Video uploaded successfully", "file_path": file_path}), 200
+        return jsonify({
+            "message": "Video uploaded successfully",
+            "file_path": file_path,
+            "original_path": request.form.get("original_path")  # Return the original path
+        }), 200
     except Exception as e:
         return jsonify({"error": f"Failed to save video: {str(e)}"}), 500
 

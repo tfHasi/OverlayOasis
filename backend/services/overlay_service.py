@@ -1,7 +1,6 @@
 import os
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
-from config import Config
 
 def get_position_coordinates(position, video_width="w", video_height="h"):
     """
@@ -61,9 +60,13 @@ def add_text_overlay(video_path, text_pairs, font_size=24, font_color="white", f
     Processes videos in parallel.
     """
     try:
-        # Use the provided output folder or fall back to the default one
-        output_dir = output_folder if output_folder else Config.OUTPUT_FOLDER
+        # Get the directory of the input video
+        video_dir = os.path.dirname(video_path)
+        
+        # Create an output folder in the same directory as the input video
+        output_dir = os.path.join(video_dir, "output") if output_folder is None else output_folder
         os.makedirs(output_dir, exist_ok=True)
+        
         output_paths = []
         x_pos, y_pos = get_position_coordinates(position)
 
