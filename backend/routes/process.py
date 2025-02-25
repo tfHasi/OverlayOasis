@@ -8,7 +8,7 @@ process_bp = Blueprint("process", __name__)
 def process():
     """
     Handles video processing and text overlay generation.
-    Creates separate videos for each language.
+    Creates separate videos for each language using environment variables for paths.
     """
     try:
         data = request.json
@@ -18,11 +18,6 @@ def process():
         font_color = data.get("font_color", "white")
         font_style = data.get("font_style", "Arial")
         position = data.get("position", "bottom-center")
-
-        # Define output folder in the same directory as the video
-        video_dir = os.path.dirname(video_path)
-        output_folder = os.path.join(video_dir, "output")
-        os.makedirs(output_folder, exist_ok=True)  # Ensure the folder exists
 
         output_paths = add_text_overlay(
             video_path, 
