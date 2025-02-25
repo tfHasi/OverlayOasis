@@ -1,1 +1,193 @@
+/* Import Google Font - Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Apply Roboto font globally */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+/* Basic reset for some elements */
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container styling */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Title styling */
+.dashboard-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+/* Section container styling */
+.section-container {
+  margin-bottom: 30px;
+}
+
+/* Section title styling */
+.section-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* File input container styling */
+.file-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* File input styling */
+.file-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Upload button styling */
+.upload-button,
+.process-button,
+.reset-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button:hover,
+.process-button:hover,
+.reset-button:hover {
+  background-color: #0056b3;
+}
+
+.upload-button:disabled,
+.process-button:disabled,
+.reset-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Success and error message styling */
+.success-message,
+.error-message {
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Status container styling */
+.status-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.status-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-neutral {
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.status-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* CSV preview styling */
+.csv-preview {
+  margin-top: 20px;
+}
+
+.preview-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.preview-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.preview-item {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.preview-key {
+  font-weight: bold;
+}
+
+.preview-more {
+  text-align: center;
+  padding: 8px;
+  color: #777;
+}
+
+/* Button container styling */
+.button-container {
+  display: flex;
+  gap: 10px;
+}
 

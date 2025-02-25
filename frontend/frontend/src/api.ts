@@ -1,74 +1,75 @@
-import axios from "axios";
+const BASE_URL = 'http://127.0.0.1:5000';
 
-// Base URL (Update according to your backend)
-const API_BASE_URL = "http://localhost:5000"; // Change this when deploying
-
-// Create an Axios instance
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// Handle Video Upload
-export const uploadVideo = async (file: File) => {
+export const uploadVideo = async (formData: FormData) => {
   try {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await api.post("/upload/video", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await fetch(`${BASE_URL}/upload/video`, {
+      method: 'POST',
+      body: formData,
     });
 
-    return response.data;
-  } catch (error: any) {
-    console.error("Video upload failed:", error);
-    throw new Error(error.response?.data?.error || "Failed to upload video");
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in uploadVideo:', error);
+    throw error;
   }
 };
 
-// Handle CSV Upload
-export const uploadCSV = async (file: File) => {
+export const uploadCSV = async (formData: FormData) => {
   try {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await api.post("/upload/csv", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await fetch(`${BASE_URL}/upload/csv`, {
+      method: 'POST',
+      body: formData,
     });
 
-    return response.data;
-  } catch (error: any) {
-    console.error("CSV upload failed:", error);
-    throw new Error(error.response?.data?.error || "Failed to upload CSV");
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in uploadCSV:', error);
+    throw error;
   }
 };
 
-// Get Processed Videos
-export const getProcessedVideos = async () => {
+export const addTextOverlay = async (
+  videoPath: string,
+  textPairs: [string, string][],
+  fontSize: number = 24,
+  fontColor: string = "white",
+  fontStyle: string = "Arial",
+  position: string = "bottom-center"
+) => {
   try {
-    const response = await api.get("/videos");
-    return response.data;
-  } catch (error: any) {
-    console.error("Failed to fetch processed videos:", error);
-    throw new Error(error.response?.data?.error || "Failed to fetch videos");
-  }
-};
-
-// Add text overlay to video
-export const addTextOverlay = async (videoPath: string, textPairs: [string, string][]) => {
-  try {
-    const response = await api.post("/process", {
-      video_path: videoPath,
-      text_pairs: textPairs
+    const response = await fetch(`${BASE_URL}/process`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        video_path: videoPath,
+        text_pairs: textPairs,
+        font_size: fontSize,
+        font_color: fontColor,
+        font_style: fontStyle,
+        position: position,
+      }),
     });
-    
-    return response.data;
-  } catch (error: any) {
-    console.error("Error adding text overlay:", error);
-    throw new Error(error.response?.data?.error || "Failed to process video");
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in addTextOverlay:', error);
+    throw error;
   }
 };
-
-export default api;

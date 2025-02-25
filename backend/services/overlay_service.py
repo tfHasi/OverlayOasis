@@ -60,11 +60,10 @@ def add_text_overlay(video_path, text_pairs, font_size=24, font_color="white", f
     Processes videos in parallel.
     """
     try:
-        # Get the directory of the input video
-        video_dir = os.path.dirname(video_path)
+        # Use the configured output folder from environment variables instead of creating one in the video directory
+        output_dir = os.environ.get('OUTPUT_FOLDER')
         
-        # Create an output folder in the same directory as the input video
-        output_dir = os.path.join(video_dir, "output")
+        # Ensure the output directory exists
         os.makedirs(output_dir, exist_ok=True)
         
         output_paths = []
