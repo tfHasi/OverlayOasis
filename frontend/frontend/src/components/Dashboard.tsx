@@ -26,6 +26,10 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState<number>(24);
+  const [fontColor, setFontColor] = useState<string>("white");
+  const [fontStyle, setFontStyle] = useState<string>("Arial");
+  const [textPosition, setTextPosition] = useState<string>("bottom-center");
 
   // Load saved data from localStorage on component mount
   useEffect(() => {
@@ -156,28 +160,35 @@ const Dashboard: React.FC = () => {
       setError("Please upload a video first.");
       return;
     }
-
+  
     if (!textPairs || textPairs.length === 0) {
       setError("Please upload a CSV file with subtitle text pairs.");
       return;
     }
-
+  
     try {
       setLoading(true);
       setError(null);
-
-      const response = await addTextOverlay(originalPath, textPairs);
-
+  
+      const response = await addTextOverlay(
+        originalPath,
+        textPairs,
+        fontSize,
+        fontColor,
+        fontStyle,
+        textPosition
+      );
+  
       if (!response || typeof response !== 'object') {
         throw new Error("Invalid response from server");
       }
-
+  
       const data = response as ProcessedVideosResponse;
-
+  
       if (!data.output_paths || !Array.isArray(data.output_paths)) {
         throw new Error("Missing or invalid videos list in server response");
       }
-
+  
       setSuccessMessage(`Overlay Text added successfully. Created ${data.output_paths.length} video(s).`);
     } catch (err) {
       console.error("Error adding Overlay Text:", err);
@@ -278,6 +289,72 @@ const Dashboard: React.FC = () => {
           </div>
         )}
       </div>
+
+      <div className="section-container">
+        <h3 className="section-title">Text Overlay Settings</h3>
+        <div className="settings-container">
+          {/* Font Size */}
+          <div className="input-group">
+            <label htmlFor="fontSize">Font Size:</label>
+            <input
+            type="number"
+            id="fontSize"
+            value={fontSize}
+            onChange={(e) => setFontSize(Number(e.target.value))}
+            min="10"
+            max="72"
+            className="input-field"
+            />
+            </div>
+
+    {/* Font Color */}
+    <div className="input-group">
+      <label htmlFor="fontColor">Font Color:</label>
+      <input
+        type="color"
+        id="fontColor"
+        value={fontColor}
+        onChange={(e) => setFontColor(e.target.value)}
+        className="input-field"
+      />
+    </div>
+
+    {/* Font Style */}
+    <div className="input-group">
+      <label htmlFor="fontStyle">Font Style:</label>
+      <select
+        id="fontStyle"
+        value={fontStyle}
+        onChange={(e) => setFontStyle(e.target.value)}
+        className="input-field"
+      >
+        <option value="Arial">Arial</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Verdana">Verdana</option>
+      </select>
+    </div>
+
+    {/* Text Position */}
+    <div className="input-group">
+      <label htmlFor="textPosition">Text Position:</label>
+      <select
+        id="textPosition"
+        value={textPosition}
+        onChange={(e) => setTextPosition(e.target.value)}
+        className="input-field"
+      >
+        <option value="top-left">Top Left</option>
+        <option value="top-center">Top Center</option>
+        <option value="top-right">Top Right</option>
+        <option value="bottom-left">Bottom Left</option>
+        <option value="bottom-center">Bottom Center</option>
+        <option value="bottom-right">Bottom Right</option>
+        <option value="center">Center</option>
+      </select>
+    </div>
+  </div>
+</div>
 
       {/* Process Video */}
       <div className="section-container">

@@ -1,25 +1,3 @@
-/* Import Google Font - Roboto */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-/* Apply Roboto font globally */
-body {
-  font-family: 'Roboto', sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: #f9fafb;
-  color: #333;
-}
-
-/* Basic reset for some elements */
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-  margin: 0;
-  padding: 0;
-}
-
 /* Container styling */
 .dashboard-container {
   max-width: 1200px;
@@ -32,10 +10,10 @@ body {
 
 /* Title styling */
 .dashboard-title {
-  font-size: 1.5rem;
+  font-size: 1.5rem; /* 24px */
   font-weight: bold;
   color: #444;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem; /* 16px */
 }
 
 /* Section container styling */
@@ -43,12 +21,12 @@ body {
   margin-bottom: 2.25rem; /* 36px */
   padding: 1.5rem; /* 24px */
   border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  border-radius: 0.375rem; /* 6px */
 }
 
 /* Section title styling */
 .section-title {
-  font-size: 1.25rem;
+  font-size: 1.25rem; /* 20px */
   font-weight: 600; /* Semibold */
   color: #555;
   margin-bottom: 0.75rem; /* 12px */
@@ -69,7 +47,7 @@ body {
   flex-grow: 1;
   padding: 0.5rem; /* 8px */
   border: 1px solid #ccc;
-  border-radius: 0.375rem;
+  border-radius: 0.375rem; /* 6px */
   background-color: #f3f4f6;
   color: #333;
 }
@@ -80,9 +58,9 @@ body {
 .reset-button {
   padding: 0.75rem 1.5rem; /* 12px 24px */
   border: none;
-  border-radius: 0.375rem;
+  border-radius: 0.375rem; /* 6px */
   color: white;
-  font-size: 1rem;
+  font-size: 1rem; /* 16px */
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -122,12 +100,12 @@ body {
 /* Success and error message styling */
 .success-message,
 .error-message {
-  padding: 1rem;
-  border-radius: 0.375rem;
+  padding: 1rem; /* 16px */
+  border-radius: 0.375rem; /* 6px */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem; /* 16px */
 }
 
 .success-message {
@@ -149,9 +127,9 @@ body {
 
 /* Status container styling */
 .status-container {
-  margin-top: 1rem;
+  margin-top: 1rem; /* 16px */
   display: flex;
-  gap: 1rem;
+  gap: 1rem; /* 16px */
 }
 
 .status-item {
@@ -168,9 +146,9 @@ body {
 }
 
 .status-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-right: 0.25rem;
+  width: 1.25rem; /* 20px */
+  height: 1.25rem; /* 20px */
+  margin-right: 0.25rem; /* 4px */
 }
 
 /* CSV preview styling */
@@ -182,7 +160,7 @@ body {
   margin-top: 0.75rem; /* 12px */
   border: 1px solid #d1d5db;
   padding: 0.75rem; /* 12px */
-  max-height: 8rem;
+  max-height: 8rem; /* 128px */
   overflow-y: auto;
 }
 
@@ -191,7 +169,7 @@ body {
 }
 
 .preview-list {
-  font-size: 0.875rem;
+  font-size: 0.875rem; /* 14px */
 }
 
 .preview-item {
@@ -209,4 +187,60 @@ body {
 .success-text {
   color: #10b981;
   margin-top: 0.75rem; /* 12px */
+}
+
+/* Settings container styling */
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 16px */
+  margin-top: 1rem; /* 16px */
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* 8px */
+}
+
+.input-group label {
+  font-weight: 500; /* Medium */
+  color: #555;
+}
+
+.input-group input,
+.input-group select {
+  padding: 0.5rem; /* 8px */
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem; /* 6px */
+  background-color: #f3f4f6;
+  color: #333;
+  font-size: 1rem; /* 16px */
+}
+
+.input-group input[type="color"] {
+  padding: 0.25rem; /* 4px */
+  width: 4rem; /* 64px */
+  height: 2.5rem; /* 40px */
+  cursor: pointer;
+}
+
+.input-group input[type="number"] {
+  width: 6rem; /* 96px */
+}
+
+.input-group select {
+  width: 100%;
+  max-width: 12rem; /* 192px */
+}
+
+@media (max-width: 768px) {
+  .settings-container {
+    gap: 0.75rem; /* 12px */
+  }
+
+  .input-group input,
+  .input-group select {
+    width: 100%;
+  }
 }
