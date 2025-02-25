@@ -18,12 +18,11 @@ def process():
         font_color = data.get("font_color", "white")
         font_style = data.get("font_style", "Arial")
         position = data.get("position", "bottom-center")
-        output_folder = data.get("output_folder")  # Get the custom output folder from the request
 
-        # If no custom output folder is provided, create one in the same directory as the video
-        if output_folder is None:
-            video_dir = os.path.dirname(video_path)
-            output_folder = os.path.join(video_dir, "output")
+        # Define output folder in the same directory as the video
+        video_dir = os.path.dirname(video_path)
+        output_folder = os.path.join(video_dir, "output")
+        os.makedirs(output_folder, exist_ok=True)  # Ensure the folder exists
 
         output_paths = add_text_overlay(
             video_path, 
@@ -31,8 +30,7 @@ def process():
             font_size, 
             font_color, 
             font_style, 
-            position,
-            output_folder  # Pass the custom output folder
+            position
         )
 
         return jsonify({
