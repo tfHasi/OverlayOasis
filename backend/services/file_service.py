@@ -6,7 +6,7 @@ from config import Config
 
 def handle_video_upload(request):
     """
-    Handles video file uploads.
+    Handles video file uploads and saves the video in the same directory as the original video.
     """
     if "file" not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
@@ -20,20 +20,30 @@ def handle_video_upload(request):
     if not file.filename.endswith(".mp4"):
         return jsonify({"error": "Invalid file type. Only .mp4 files are allowed"}), 400
 
-    # Secure the filename and save the file
+    # Secure the filename
     filename = secure_filename(file.filename)
-    file_path = os.path.join(Config.UPLOAD_FOLDER, filename)
+
+    # Get the original path from the request
+    original_path = request.form.get("original_path")
+    if not original_path:
+        return jsonify({"error": "Original path not provided"}), 400
+
+    # Determine the directory of the original video
+    original_dir = os.path.dirname(original_path)
+
+    # Save the file in the same directory as the original video
+    file_path = os.path.join(original_dir, filename)
 
     try:
         file.save(file_path)
         return jsonify({
             "message": "Video uploaded successfully",
             "file_path": file_path,
-            "original_path": request.form.get("original_path")  # Return the original path
+            "original_path": original_path  # Return the original path
         }), 200
     except Exception as e:
         return jsonify({"error": f"Failed to save video: {str(e)}"}), 500
-
+    
 def handle_csv_upload(request):
     """
     Handles CSV file uploads.
