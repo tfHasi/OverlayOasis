@@ -4,6 +4,7 @@ from config import Config
 from routes.auth import auth_bp
 from routes.upload import upload_bp
 from routes.process import process_bp
+from routes.translation import translation_bp
 import os
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -18,6 +19,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(upload_bp)
     app.register_blueprint(process_bp)
+    app.register_blueprint(translation_bp)
 
     return app
 
