@@ -1,0 +1,112 @@
+/* Navbar Container */
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 12px; /* Rounded corners */
+    margin: 12px; /* Add some margin to avoid touching the edges */
+  }
+  
+  /* Site Name (Brand) */
+  .navbar-brand {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2d3748; /* Dark gray */
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .navbar-brand:hover {
+    color: #6d28d9; /* Purple color for hover effect */
+    transform: scale(1.05);
+  }
+  
+  /* Right Side of Navbar */
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  /* User Profile Section */
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  /* Profile Picture */
+  .profile-picture {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #e0e0e0;
+    transition: transform 0.2s ease, border-color 0.3s ease;
+  }
+  
+  .profile-picture:hover {
+    transform: scale(1.1);
+    border-color: #6d28d9; /* Purple border on hover */
+  }
+  
+  /* Login and Logout Buttons */
+  .login-button,
+  .logout-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .login-button {
+    background-color: #6d28d9; /* Purple */
+    color: white;
+    box-shadow: 0 2px 4px rgba(109, 40, 217, 0.2);
+  }
+  
+  .login-button:hover {
+    background-color: #5b21b6; /* Darker purple */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(109, 40, 217, 0.3);
+  }
+  
+  .logout-button {
+    background-color: #db4437; /* Google Red */
+    color: white;
+    box-shadow: 0 2px 4px rgba(219, 68, 55, 0.2);
+  }
+  
+  .logout-button:hover {
+    background-color: #c1351d; /* Darker red */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(219, 68, 55, 0.3);
+  }
+  
+  .login-button:active,
+  .logout-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Optional: Add a subtle animation for the navbar */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .navbar-container {
+    animation: slideIn 0.5s ease-out;
+  }
