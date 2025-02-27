@@ -94,7 +94,7 @@ const Dashboard: React.FC = () => {
         setSuccessMessage={setSuccessMessage}
       />
 
-      {/* Text Overlay Settings Component */}
+      {/* Text Overlay Settings Component with Preview */}
       <TextOverlaySettings
         fontSize={fontSize}
         setFontSize={setFontSize}
@@ -104,6 +104,8 @@ const Dashboard: React.FC = () => {
         setFontStyle={setFontStyle}
         textPosition={textPosition}
         setTextPosition={setTextPosition}
+        videoPath={videoPath}
+        textPairs={textPairs}
       />
 
       {/* Process Actions Component */}

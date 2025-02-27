@@ -244,3 +244,102 @@
     width: 100%;
   }
 }
+
+/* Add these styles to your existing Dashboard.css file */
+
+.settings-preview-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.settings-container {
+  flex: 1;
+  min-width: 300px;
+}
+
+.preview-panel {
+  flex: 1;
+  min-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  background-color: #f8f8f8;
+}
+
+.video-preview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preview-title {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.preview-wrapper {
+  position: relative;
+  width: 100%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 180px;
+}
+
+.preview-canvas {
+  max-width: 100%;
+  max-height: 300px;
+  cursor: pointer;
+  background-color: #000;
+}
+
+.preview-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.preview-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.preview-button {
+  padding: 6px 14px;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.preview-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.preview-button:hover:not(:disabled) {
+  background-color: #3a3a3a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .settings-preview-container {
+    flex-direction: column;
+  }
+  
+  .preview-panel, .settings-container {
+    width: 100%;
+  }
+}
