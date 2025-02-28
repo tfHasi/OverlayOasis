@@ -52,12 +52,17 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
         throw new Error("Missing required fields in server response");
       }
 
-      setVideoPath(data.file_path);
-      setOriginalPath(data.file_path);
+      // Ensure we're using a web-accessible URL, not a file system path
+      const videoUrl = data.file_path.startsWith('/') 
+        ? data.file_path  // Already a URL path
+        : `/uploads/${data.file_path.split('/').pop()}`; // Convert to URL path
+      
+      setVideoPath(videoUrl);
+      setOriginalPath(videoUrl);
       setSuccessMessage(data.message || "Video uploaded successfully.");
 
-      localStorage.setItem("videoPath", data.file_path);
-      localStorage.setItem("originalPath", data.file_path);
+      localStorage.setItem("videoPath", videoUrl);
+      localStorage.setItem("originalPath", videoUrl);
     } catch (err) {
       console.error("Error uploading video:", err);
       setError(err instanceof Error ? err.message : "Error uploading video. Please try again.");
@@ -85,7 +90,7 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
           {loading ? "Uploading..." : "Upload Video"}
         </button>
       </div>
-      {videoPath && <p className="success-text">Video ready at: {videoPath}</p>}
+      {videoPath && <p className="success-text">Video ready for processing</p>}
     </div>
   );
 };
