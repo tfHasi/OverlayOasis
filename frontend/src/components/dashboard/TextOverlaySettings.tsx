@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TextOverlaySettingsProps } from '../types';
 import VideoPreview from './VideoPreview';
 
@@ -6,6 +6,23 @@ interface ExtendedTextOverlaySettingsProps extends TextOverlaySettingsProps {
   videoPath: string;
   textPairs: [string, string][];
 }
+
+// Function to convert color names to hex values
+const colorNameToHex = (colorName: string): string => {
+  // Basic color mapping
+  const colorMap: Record<string, string> = {
+    'white': '#FFFFFF',
+    'black': '#000000',
+    'red': '#FF0000',
+    'green': '#008000',
+    'blue': '#0000FF',
+    'yellow': '#FFFF00'
+  };
+  
+  // Return the hex value if the color name exists in the map
+  // Otherwise, return the original value (assuming it's already a valid hex)
+  return colorMap[colorName.toLowerCase()] || colorName;
+};
 
 const TextOverlaySettings: React.FC<ExtendedTextOverlaySettingsProps> = ({
   fontSize,
@@ -21,6 +38,16 @@ const TextOverlaySettings: React.FC<ExtendedTextOverlaySettingsProps> = ({
 }) => {
   // Get sample text from textPairs for preview
   const sampleText = textPairs.length > 0 ? textPairs[0][1] : "Sample Text";
+  
+  // Convert fontColor to hex for the color input
+  const colorHex = fontColor.startsWith('#') ? fontColor : colorNameToHex(fontColor);
+  
+  // When the component mounts, ensure font color is in hex format
+  useEffect(() => {
+    if (!fontColor.startsWith('#')) {
+      setFontColor(colorNameToHex(fontColor));
+    }
+  }, []);
   
   return (
     <div className="section-container">
@@ -49,7 +76,7 @@ const TextOverlaySettings: React.FC<ExtendedTextOverlaySettingsProps> = ({
             <input
               type="color"
               id="fontColor"
-              value={fontColor}
+              value={colorHex}
               onChange={(e) => setFontColor(e.target.value)}
               className="input-field"
             />
@@ -83,10 +110,12 @@ const TextOverlaySettings: React.FC<ExtendedTextOverlaySettingsProps> = ({
               <option value="top-left">Top Left</option>
               <option value="top-center">Top Center</option>
               <option value="top-right">Top Right</option>
+              <option value="middle-left">Middle Left</option>
+              <option value="middle-center">Middle Center</option>
+              <option value="middle-right">Middle Right</option>
               <option value="bottom-left">Bottom Left</option>
               <option value="bottom-center">Bottom Center</option>
               <option value="bottom-right">Bottom Right</option>
-              <option value="center">Center</option>
             </select>
           </div>
         </div>
