@@ -120,9 +120,22 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
       }
     };
     
+    const handleVideoError = (e: Event) => {
+      console.error("Video error:", e);
+      // Draw a placeholder or error message on canvas
+      canvas.width = 400;
+      canvas.height = 300;
+      ctx.fillStyle = "#f0f0f0";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#ff0000";
+      ctx.font = "16px Arial";
+      ctx.fillText("Error loading video", 20, 150);
+    };
+    
     video.addEventListener('play', handleVideoPlay);
     video.addEventListener('loadeddata', handleVideoLoadedData);
     video.addEventListener('seeked', handleVideoLoadedData);
+    video.addEventListener('error', handleVideoError);
     
     // If video already has data, draw the initial frame
     if (video.readyState >= 2) {
@@ -133,6 +146,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
       video.removeEventListener('play', handleVideoPlay);
       video.removeEventListener('loadeddata', handleVideoLoadedData);
       video.removeEventListener('seeked', handleVideoLoadedData);
+      video.removeEventListener('error', handleVideoError);
     };
   }, [videoPath, previewText, fontSize, fontColor, fontStyle, textPosition]);
   
@@ -141,15 +155,17 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
       <h4 className="preview-title">Preview</h4>
       <div className="preview-wrapper">
         {/* Hidden video element for loading the source */}
-        <video 
-          ref={videoRef} 
-          src={videoPath}
-          className="hidden-video" 
-          controls={false}
-          muted
-          preload="auto"
-          style={{ display: 'none' }}
-        />
+        {videoPath ? (
+          <video 
+            ref={videoRef} 
+            src={videoPath}
+            className="hidden-video" 
+            controls={false}
+            muted
+            preload="auto"
+            style={{ display: 'none' }}
+          />
+        ) : null}
         
         {/* Canvas where we'll draw the video with text overlay */}
         <canvas 
