@@ -27,9 +27,11 @@ def handle_video_upload(request):
 
     try:
         file.save(file_path)
+        # Return a relative URL path, not the file system path
+        relative_path = f"/uploads/{filename}"
         return jsonify({
             "message": "Video uploaded successfully",
-            "file_path": file_path
+            "file_path": relative_path
         }), 200
     except Exception as e:
         return jsonify({"error": f"Failed to save video: {str(e)}"}), 500
