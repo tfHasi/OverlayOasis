@@ -26,10 +26,6 @@ __pycache__/
 instance/
 .webassets-cache
 
-# Ignore SQLite databases
-*.sqlite
-*.sqlite3
-
 # Ignore IDE specific files
 .vscode/
 .idea/
