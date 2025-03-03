@@ -19,16 +19,33 @@ def get_position_coordinates(position, video_width="w", video_height="h"):
     }
     return position_map.get(position, ("(w-text_w)/2", "h-24"))
 
+def get_font_file(font_style):
+    """
+    Map font style names to actual font files available on the system.
+    """
+    font_map = {
+        "Arial": "Arial",
+        "Times New Roman": "Times New Roman",
+        "Courier New": "Courier New",
+        "Verdana": "Verdana"
+    }
+    # Return just the font name - FFmpeg will try to find it in the system fonts
+    return font_map.get(font_style, "Arial")
+
 def process_single_video(video_path, output_path, text, font_size, font_color, font_style, x_pos, y_pos):
     """
     Process a single video with the given text overlay.
     """
     try:
+        # Get the font file name
+        font = get_font_file(font_style)
+        
         # Build the drawtext filter
         filter_text = (
             f"drawtext=text='{text}'"
             f":fontsize={font_size}"
             f":fontcolor={font_color}"
+            f":fontfile={font}" if os.name == 'nt' else f":font={font}"  # Windows vs Linux/Mac
             f":box=1:boxcolor=black@0.5"
             f":boxborderw=5"
             f":x={x_pos}"
@@ -52,7 +69,7 @@ def process_single_video(video_path, output_path, text, font_size, font_color, f
         subprocess.run(command, check=True)
         return output_path
     except subprocess.CalledProcessError as e:
-        raise Exception(f"FFmpeg error: {e.stderr}")
+        raise Exception(f"FFmpeg error: {e.stderr if hasattr(e, 'stderr') else str(e)}")
 
 def add_text_overlay(video_path, text_pairs, font_size=24, font_color="white", font_style="Arial", position="bottom-center"):
     """
