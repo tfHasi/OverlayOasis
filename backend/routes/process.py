@@ -27,6 +27,14 @@ def process():
         else:
             # Fallback if the path doesn't match expected format
             video_path = relative_video_path
+            
+        # Convert hex color to FFmpeg compatible format if it starts with '#'
+        if font_color.startswith('#'):
+            # Remove the '#' and convert to FFmpeg format
+            font_color = font_color[1:]
+            # FFmpeg expects either a color name or a hex value with alpha: 0xAARRGGBB
+            # For simplicity, we'll use the format: white@1.0 or 0xFFFFFF@1.0
+            font_color = f"0x{font_color}@1.0"
 
         output_paths = add_text_overlay(
             video_path, 
