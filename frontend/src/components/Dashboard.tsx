@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './Dashboard.css';
 
 // Import components
@@ -22,6 +22,9 @@ const Dashboard: React.FC = () => {
   const [fontColor, setFontColor] = useState<string>("white");
   const [fontStyle, setFontStyle] = useState<string>("Arial");
   const [textPosition, setTextPosition] = useState<string>("bottom-center");
+  
+  // Add a key to force re-render of components
+  const [resetKey, setResetKey] = useState<number>(0);
 
   // Load saved data from localStorage on component mount
   useEffect(() => {
@@ -55,6 +58,9 @@ const Dashboard: React.FC = () => {
     localStorage.removeItem("videoPath");
     localStorage.removeItem("originalPath");
     localStorage.removeItem("textPairs");
+    
+    // Increment reset key to force re-render of child components
+    setResetKey(prevKey => prevKey + 1);
   };
 
   return (
@@ -70,6 +76,7 @@ const Dashboard: React.FC = () => {
 
       {/* Video Upload Component */}
       <VideoUpload
+        key={`video-${resetKey}`}
         videoFile={videoFile}
         setVideoFile={setVideoFile}
         videoPath={videoPath}
@@ -84,6 +91,7 @@ const Dashboard: React.FC = () => {
 
       {/* CSV Upload Component */}
       <CSVUpload
+        key={`csv-${resetKey}`}
         csvFile={csvFile}
         setCsvFile={setCsvFile}
         textPairs={textPairs}
@@ -96,6 +104,7 @@ const Dashboard: React.FC = () => {
 
       {/* Text Overlay Settings Component with Preview */}
       <TextOverlaySettings
+        key={`settings-${resetKey}`}
         fontSize={fontSize}
         setFontSize={setFontSize}
         fontColor={fontColor}
